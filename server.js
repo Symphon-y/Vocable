@@ -10,21 +10,14 @@ const mongoose = require('mongoose');
 var mongoURL = `mongodb+srv://VocableAdmin:${process.env.Vocable_Password}@vocable.jfxyo.mongodb.net/${process.env.Database}?retryWrites=true&w=majority`;
 main().catch(err => console.log(err));
 
-const randomWordOptions = {
-  method: 'GET',
-  url: 'https://random-words5.p.rapidapi.com/getRandom',
-  headers: {
-    'X-RapidAPI-Host': `${process.env.Random_Word_API_Host}`,
-    'X-RapidAPI-Key': `${process.env.Random_Word_API_Key}`
-  }
-};
-
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With,Content-Type, Accept");
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
   next();
 });
+
+
 
 async function main() {
   await mongoose.connect(mongoURL);
@@ -37,7 +30,16 @@ async function main() {
 
   let wordADay = new cron.CronJob('00 00 00 * * *', () => {
 
-    axios.request(randomWordOptions).then(function (response) {
+    const options = {
+      method: 'GET',
+      url: 'https://random-words5.p.rapidapi.com/getRandom',
+      headers: {
+        'X-RapidAPI-Host': `${process.env.Random_Word_API_Host}`,
+        'X-RapidAPI-Key': `${process.env.Random_Word_API_Key}`
+      }
+    };
+
+    axios.request(options).then(function (response) {
       todaysVocable = new Vocable({word: response.data})
       todaysVocable.save();
       console.log(todaysVocable);
