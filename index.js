@@ -94,7 +94,98 @@ $(document).ready(function(){
   var currentGameRow = '1';
   var currentGameTile = '1';
 
-  // Keyboard Event Listeners
+  var keyHistory = '';
+
+  // Keyboard Event Listeners | Physical | Alphabetical
+  $(document).keypress(function(e) {
+    var currentTile = $(`.game_tile_r${currentGameRow}t${currentGameTile}`);
+    var keyPress = String.fromCharCode(e.which);
+    var keyToUpCase = keyPress.toUpperCase();
+    var keyCodeToNum = Number(e.which)
+    if (e.which >= 97 && e.which <= 122) {
+      if ((currentTile).hasClass('active')){
+        console.log('continue');
+      } else {
+        $(currentTile).text(keyToUpCase)
+        $(currentTile).addClass('active')
+        $(currentTile).addClass('animate__animated animate__pulse')
+      }
+      if (currentGameTile <= wordOfTheDay.length){
+        currentGameTile++;
+      }
+    }
+  });
+  // Keyboard Event Listeners | Physical | Functional
+  $(document).keydown(function(event){
+    var letter = String.fromCharCode(event.which);
+
+    if(event.keyCode === 46 || event.keyCode === 8){ // Delete Key Pressed
+      if (currentGameTile > 1){
+        currentGameTile--;
+      }
+
+      var currentTile = $(`.game_tile_r${currentGameRow}t${currentGameTile}`);
+
+      if ((currentTile).hasClass('active')){
+        $(currentTile).text('')
+        $(currentTile).removeClass('active')
+        $(currentTile).removeClass('animate__animated')
+        $(currentTile).removeClass('animate__pulse')
+      } else {
+        console.log('continue');
+
+      }
+    }
+
+    if(event.keyCode === 13){ // Enter Key Pressed
+      if ((currentGameTile-1)< wordOfTheDay.length){
+        var remainingLetters = (wordOfTheDay.length - (currentGameTile-1))
+        alert(`Slow down there cowboy, you still need to enter ${remainingLetters} more letters...`)
+      }
+      if (currentGameTile-1 === wordOfTheDay.length) {
+        var submissionArray = [];
+        $(`.r${currentGameRow}`).each(function (value, index) {
+          submissionArray.push($(this).text())
+        })
+
+        var submission = JSON.stringify(submissionArray)
+        var dRes;
+        $.ajax({
+          type: "POST",
+          url: "http://localhost:3000/submittedword",
+          data: submission,
+          contentType: "application/json",
+          dataType: "json",
+          success: function (res){
+            if (res.result_msg === 'Entry word not found'){
+              alert('Sorry, this doesnt look like a word to me')
+            }
+            var wordOfTheDayArray = Array.from(wordOfTheDay);
+            var resReqArray = Array.from(res.request)
+            forEach(wordOfTheDayArray, function (value, index){
+              forEach(resReqArray, function (innerValue, innerIndex) {
+                if (value === innerValue) {
+                  $(`.game_tile_r${currentGameRow}t${innerIndex + 1}`).addClass('present')
+                  $(`.game_tile_r${currentGameRow}t${innerIndex + 1}`).addClass('animate__flipInY')
+                }
+                for (var i = 0; i < wordOfTheDay.length; i++){
+                  if (wordOfTheDay[i] === res.request[i]){
+                    $(`.game_tile_r${currentGameRow}t${i+1}`).removeClass('present')
+                    $(`.game_tile_r${currentGameRow}t${i+1}`).addClass('correct')
+                  }
+                }
+              })
+            })
+            console.log(res)
+            currentGameRow++
+            currentGameTile = 1;
+          }
+        });
+      }
+    }
+ });
+
+  // Keyboard Event Listeners | Virtual
   $('.kb_btn').click(function() {
     var buttonText = $(this).text();
     var currentTile = $(`.game_tile_r${currentGameRow}t${currentGameTile}`);
