@@ -38,44 +38,11 @@ $(document).ready(function(){
   var $app = $('#app');
   $app.html('');
 
-  // Create New HTML Elements | Structural
+  // Create New HTML Elements
   var $header = $('<div id="header"></div>')
   var $title = $('<h1 class="title">Vocable</h1>')
   var $gameContainer = $('<div class="game_container"></div>')
-
-  // Create New HTML Elements | Virtual Keyboard
   var $keyboardContainer = $('<div id="kb_container"></div>')
-  var $keyboardTopRow = $('<div class="kb_row_top kb"></div>')
-  var $keyboardMiddleRow = $('<div class="kb_row_mid kb"></div>')
-  var $keyboardBottomRow = $('<div class="kb_row_bottom kb"></div>')
-  var $button_Q = $('<button class="kb_btn q">Q</button>')
-  var $button_W = $('<button class="kb_btn w">W</button>')
-  var $button_E = $('<button class="kb_btn e">E</button>')
-  var $button_R = $('<button class="kb_btn r">R</button>')
-  var $button_T = $('<button class="kb_btn t">T</button>')
-  var $button_Y = $('<button class="kb_btn y">Y</button>')
-  var $button_U = $('<button class="kb_btn u">U</button>')
-  var $button_I = $('<button class="kb_btn i">I</button>')
-  var $button_O = $('<button class="kb_btn o">O</button>')
-  var $button_P = $('<button class="kb_btn p">P</button>')
-  var $button_A = $('<button class="kb_btn a">A</button>')
-  var $button_S = $('<button class="kb_btn s">S</button>')
-  var $button_D = $('<button class="kb_btn d">D</button>')
-  var $button_F = $('<button class="kb_btn f">F</button>')
-  var $button_G = $('<button class="kb_btn g">G</button>')
-  var $button_H = $('<button class="kb_btn h">H</button>')
-  var $button_J = $('<button class="kb_btn j">J</button>')
-  var $button_K = $('<button class="kb_btn k">K</button>')
-  var $button_L = $('<button class="kb_btn l">L</button>')
-  var $button_Z = $('<button class="kb_btn z">Z</button>')
-  var $button_X = $('<button class="kb_btn x">X</button>')
-  var $button_C = $('<button class="kb_btn c">C</button>')
-  var $button_V = $('<button class="kb_btn v">V</button>')
-  var $button_B = $('<button class="kb_btn b">B</button>')
-  var $button_N = $('<button class="kb_btn n">N</button>')
-  var $button_M = $('<button class="kb_btn m">M</button>')
-  var $button_ENTR = $('<button class="kb_entr">ENTER</button>')
-  var $button_DLT = $('<button class="kb_dlt">DELETE</button>')
 
   // Add HTML Elements To The DOM
   $header.prependTo($body);
@@ -83,37 +50,46 @@ $(document).ready(function(){
   $gameContainer.appendTo($app);
   $title.prependTo($header);
   $keyboardContainer.appendTo($app);
-  $keyboardTopRow.appendTo($keyboardContainer);
-  $keyboardMiddleRow.appendTo($keyboardContainer);
-  $keyboardBottomRow.appendTo($keyboardContainer);
-  $button_Q.appendTo($keyboardTopRow)
-  $button_W.appendTo($keyboardTopRow)
-  $button_E.appendTo($keyboardTopRow)
-  $button_R.appendTo($keyboardTopRow)
-  $button_T.appendTo($keyboardTopRow)
-  $button_Y.appendTo($keyboardTopRow)
-  $button_U.appendTo($keyboardTopRow)
-  $button_I.appendTo($keyboardTopRow)
-  $button_O.appendTo($keyboardTopRow)
-  $button_P.appendTo($keyboardTopRow)
-  $button_A.appendTo($keyboardMiddleRow)
-  $button_S.appendTo($keyboardMiddleRow)
-  $button_D.appendTo($keyboardMiddleRow)
-  $button_F.appendTo($keyboardMiddleRow)
-  $button_G.appendTo($keyboardMiddleRow)
-  $button_H.appendTo($keyboardMiddleRow)
-  $button_J.appendTo($keyboardMiddleRow)
-  $button_K.appendTo($keyboardMiddleRow)
-  $button_L.appendTo($keyboardMiddleRow)
-  $button_ENTR.appendTo($keyboardBottomRow)
-  $button_Z.appendTo($keyboardBottomRow)
-  $button_X.appendTo($keyboardBottomRow)
-  $button_C.appendTo($keyboardBottomRow)
-  $button_V.appendTo($keyboardBottomRow)
-  $button_B.appendTo($keyboardBottomRow)
-  $button_N.appendTo($keyboardBottomRow)
-  $button_M.appendTo($keyboardBottomRow)
-  $button_DLT.appendTo($keyboardBottomRow)
+
+  // Keyboard Data
+  function getLetterElement(letter) {
+    var className =
+      letter === 'DELETE'
+      ? 'kb_dlt'
+      : letter === 'ENTER'
+      ? 'kb_entr'
+      : `kb_btn ${letter.toLowerCase()}`;
+    return $(`<button class="${className}">${letter}</button>`);
+  }
+
+  var keyboardChars = [
+    ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+    ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'DELETE']
+  ];
+
+  // Set the containers for each row
+  var $keyboardTopRow = $('<div class="kb_row_top kb"></div>')
+  var $keyboardMiddleRow = $('<div class="kb_row_mid kb"></div>')
+  var $keyboardBottomRow = $('<div class="kb_row_bottom kb"></div>')
+
+  var rowContainers = [$keyboardTopRow, $keyboardMiddleRow, $keyboardBottomRow];
+
+  // For each ROW of the keyboard
+  keyboardChars.forEach(function(row, rowIndex) {
+    // For each LETTER in the ROW
+    row.forEach(function(letter) {
+      var $element = getLetterElement(letter); // Generate the button
+
+      // Add the element to the row
+      $element.appendTo(rowContainers[rowIndex])
+    })
+  })
+
+  // Add each row to the larger keyboard container
+  rowContainers.forEach(function(row) {
+    row.appendTo($keyboardContainer);
+  })
 
   var currentGameRow = '1';
   var currentGameTile = '1';
