@@ -140,8 +140,16 @@ $(document).ready(function(){
     if(event.keyCode === 13){ // Enter Key Pressed
       if ((currentGameTile-1)< wordOfTheDay.length){
         var remainingLetters = (wordOfTheDay.length - (currentGameTile-1))
+        $(`.game_row.r${currentGameRow}`).addClass('animate__animated animate__shakeX')
+
         alert(`Slow down there cowboy, you still need to enter ${remainingLetters} more letters...`)
+
+        setTimeout(() => {
+          $(`.game_row.r${currentGameRow}`).removeClass('animate__animated animate__shakeX');
+        }, "500")
       }
+
+
       if (currentGameTile-1 === wordOfTheDay.length) {
         var submissionArray = [];
         $(`.r${currentGameRow}`).each(function (value, index) {
@@ -159,26 +167,35 @@ $(document).ready(function(){
           success: function (res){
             if (res.result_msg === 'Entry word not found'){
               alert('Sorry, this doesnt look like a word to me')
-            }
-            var wordOfTheDayArray = Array.from(wordOfTheDay);
-            var resReqArray = Array.from(res.request)
-            forEach(wordOfTheDayArray, function (value, index){
-              forEach(resReqArray, function (innerValue, innerIndex) {
-                if (value === innerValue) {
-                  $(`.game_tile_r${currentGameRow}t${innerIndex + 1}`).addClass('present')
-                  $(`.game_tile_r${currentGameRow}t${innerIndex + 1}`).addClass('animate__flipInY')
-                }
-                for (var i = 0; i < wordOfTheDay.length; i++){
-                  if (wordOfTheDay[i] === res.request[i]){
-                    $(`.game_tile_r${currentGameRow}t${i+1}`).removeClass('present')
-                    $(`.game_tile_r${currentGameRow}t${i+1}`).addClass('correct')
+              $(`.game_row.r${currentGameRow}`).addClass('animate__animated animate__shakeX')
+              $(`.game_row r${currentGameRow}`).removeClass('animate__animated')
+              $(`.game_row r${currentGameRow}`).removeClass('animate__shakeX')
+              $(`.game_row r${currentGameRow}`).addClass('animate__animated')
+              $(`.game_row r${currentGameRow}`).addClass('animate__shakeX')
+              setTimeout(() => {
+                $(`.game_row.r${currentGameRow}`).removeClass('animate__animated animate__shakeX');
+              }, "500")
+            } else {
+              var wordOfTheDayArray = Array.from(wordOfTheDay);
+              var resReqArray = Array.from(res.request)
+              forEach(wordOfTheDayArray, function (value, index){
+                forEach(resReqArray, function (innerValue, innerIndex) {
+                  if (value === innerValue) {
+                    $(`.game_tile_r${currentGameRow}t${innerIndex + 1}`).addClass('present')
+                    $(`.game_tile_r${currentGameRow}t${innerIndex + 1}`).addClass('animate__flipInY')
                   }
-                }
+                  for (var i = 0; i < wordOfTheDay.length; i++){
+                    if (wordOfTheDay[i] === res.request[i]){
+                      $(`.game_tile_r${currentGameRow}t${i+1}`).removeClass('present')
+                      $(`.game_tile_r${currentGameRow}t${i+1}`).addClass('correct')
+                    }
+                  }
+                })
               })
-            })
             console.log(res)
             currentGameRow++
             currentGameTile = 1;
+            }
           }
         });
       }
