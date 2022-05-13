@@ -1,0 +1,170 @@
+/*
+Background Color: #121214 RGB (18,18,20)
+Primary Text Color: #dadbdd RGB (218, 219, 221)
+App Grey Block Color: #3a3a3c RGB (58, 58, 60)
+App Green BlocK Color: #548d4e RGB (84, 141, 78)
+App Yellow Block Color: #b49f3b RGB (180, 159, 59)
+Keypad Default Grey: #818384 RGB (129, 131, 132)
+*/
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100vw;
+  height: 100vh;
+  padding: 0%;
+  margin: 0%;
+  font-family: 'Helvetica Neue', 'IBM Plex Sans', sans-serif;
+  background-color: #121214;
+  color:  #dadbdd;
+
+}
+
+#header {
+  order: 0;
+  display: flex;
+  width: 100%;
+  height: 60px;
+  padding: 0rem;
+  margin-right: 0rem;
+  margin-left: 0rem;
+  justify-content: center;
+  border-style: solid;
+  border-color: RGBA(58, 58, 60, 80);
+  border-width: 2px;
+  border-right: none;
+  border-top: none;
+  border-left: none;
+}
+
+.title {
+  font-family: 'Helvetica Neue', 'IBM Plex Sans', sans-serif;
+  font-size: 50px;
+  font-weight: bold;
+  align-self: center;
+  border-bottom: #3a3a3c;
+  border:3rem;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  order: 2;
+}
+.game_container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 3rem;
+  margin-bottom: 4rem;
+}
+
+.game_row{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.game_tile {
+  display: flex;
+  margin: .25rem;
+  font-family: 'Helvetica Neue', 'IBM Plex Sans', sans-serif;
+  font-size: 50px;
+  font-weight: bold;
+  flex-direction: column;
+  background-color: transparent;
+  border-style: solid;
+  border-color: #3a3a3c;
+  border-width: 4px;
+  justify-content: center;
+  text-align: center;
+  color: #dadbdd;
+  min-width: 5rem;
+  min-height: 5rem;
+}
+.correct {
+ background-color: #548d4e;
+}
+.present {
+  background-color: #b49f3b;
+}
+
+.kb_row_top {
+  display: flex;
+  flex-direction: row;
+  order: 0;
+  align-self: center;
+}
+
+.kb_row_mid {
+  display: flex;
+  flex-direction: row;
+  order: 1;
+  align-self: center;
+}
+
+.kb_row_bottom {
+  display: flex;
+  flex-direction: row;
+  order: 2;
+  align-self: center;
+}
+
+#kb_container {
+  display: flex;
+  flex-direction: column;
+  order: 3;
+  height: 30%;
+  width: 100%;
+  justify-content: center;
+}
+
+.kb_btn {
+  border-radius: .5rem;
+  margin-left: .2rem;
+  margin-bottom: .2rem;
+  font-family: 'Helvetica Neue', 'IBM Plex Sans', sans-serif;
+  font-size: 25px;
+  font-weight: 600;
+  border: none;
+  height: 6rem;
+  width: 5rem;
+  background-color: #818384;
+  color: #dadbdd;
+}
+.kb_btn:active {
+  background-color: #727475;
+}
+
+.kb_entr {
+  border-radius: .5rem;
+  margin-left: .2rem;
+  margin-bottom: .2rem;
+  font-family: 'Helvetica Neue', 'IBM Plex Sans', sans-serif;
+  font-size: 25px;
+  font-weight: 600;
+  border: none;
+  height: 6rem;
+  width: 8rem;
+  background-color: #818384;
+  color: #dadbdd;
+}
+.kb_entr:active {
+  background-color: #727475;
+}
+
+.kb_dlt {
+  border-radius: .5rem;
+  margin-left: .2rem;
+  margin-bottom: .2rem;
+  font-family: 'Helvetica Neue', 'IBM Plex Sans', sans-serif;
+  font-size: 25px;
+  font-weight: 600;
+  border: none;
+  height: 6rem;
+  width: 8rem;
+  background-color: #818384;
+  color: #dadbdd;
+}
+.kb_dlt:active {
+  background-color: #727475;
+}
