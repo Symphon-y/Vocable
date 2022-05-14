@@ -32,6 +32,73 @@ $(document).ready(function(){
 
   };
 
+  uniq = function(array, isSorted, iterator) {
+    var outputArray = [];
+    var arrayFromIterator = [];
+    var nonUniqueIndexes = [];
+    if (!iterator) {
+      outputArray = Array.from(new Set(array));
+      return outputArray;
+    } else {
+      _.each(array, function (item, index) {
+        arrayFromIterator.push(iterator(item));
+      });
+      var currentIndex = 0;
+      var loopIterator = 1;
+      var booleanArray = ['t'];
+      var uniqueChecker = function (array) {
+        for ( var i = loopIterator; i < arrayFromIterator.length; i++) {
+          var loopHolderArray = [];
+          if (loopIterator !== undefined) {
+            if (booleanArray.length < arrayFromIterator.length) {
+              if (arrayFromIterator[currentIndex] === arrayFromIterator[i]) {
+                booleanArray.push('x');
+              } else {
+                booleanArray.push('t');
+              }
+            }
+            if (booleanArray.length === arrayFromIterator.length) {
+              if (arrayFromIterator[currentIndex] === arrayFromIterator[loopIterator]) {
+                booleanArray.splice(loopIterator, 1, 'x');
+              }
+            }
+            for (var r = arrayFromIterator.length - 2; r > 0; r--) {
+              var checkLastIndex = arrayFromIterator.length - 1;
+              if (arrayFromIterator[checkLastIndex] === arrayFromIterator[r]) {
+                booleanArray.splice(checkLastIndex, 1, 'x');
+              }
+            }
+          }
+        }
+        currentIndex++;
+        loopIterator++;
+        if (currentIndex < arrayFromIterator.length) {
+          uniqueChecker(arrayFromIterator);
+        }
+      };
+      uniqueChecker(arrayFromIterator);
+      _.each(array, function(item, index) {
+        outputArray.push(item);
+      });
+
+      var destroyTheXs = function(array) {
+        for (var d = 0; d < booleanArray.length; d++) {
+          if (booleanArray[d] === 'x') {
+            outputArray.splice(d, 1);
+            booleanArray.splice(d, 1);
+          }
+        }
+        for (var dd = 0; dd < booleanArray.length; dd++) {
+          if (booleanArray[dd] === 'x') {
+            destroyTheXs(booleanArray);
+          }
+        }
+      };
+
+      destroyTheXs(booleanArray);
+      return outputArray;
+    }
+  };
 
   // Grab Already Existing HTML Elements
   var $body = $('body');
@@ -174,20 +241,46 @@ $(document).ready(function(){
             } else {
               var wordOfTheDayArray = Array.from(wordOfTheDay);
               var resReqArray = Array.from(res.request)
+              var incorrectGuesses = Array.from(res.request);
               forEach(wordOfTheDayArray, function (value, index){
+                var uniqueCheck = [];
                 forEach(resReqArray, function (innerValue, innerIndex) {
+                  var kbBtnValue = innerValue.toLowerCase();
                   if (value === innerValue) {
-                    $(`.game_tile_r${currentGameRow}t${innerIndex + 1}`).addClass('present')
-                    $(`.game_tile_r${currentGameRow}t${innerIndex + 1}`).addClass('animate__flipInY')
+                    incorrectGuesses.splice(innerIndex, 1);
+                    if (uniqueCheck.length === 0) {
+                      $(`.game_tile_r${currentGameRow}t${innerIndex + 1}`).addClass('present')
+                      $(`.game_tile_r${currentGameRow}t${innerIndex + 1}`).addClass('animate__flipInY')
+                      $(`.kb_btn.${kbBtnValue}`).css('background-color', '#b49f3b');
+                      $(`.kb_btn.${kbBtnValue}`).addClass('animate__animated animate__flipInY');
+                      uniqueCheck.push(value);
+                    } else {
+                      if (value === uniqueCheck[0]){
+                        return;
+                      }
+                    }
                   }
                   for (var i = 0; i < wordOfTheDay.length; i++){
+                    var kbBtn = wordOfTheDay[i].toLowerCase();
                     if (wordOfTheDay[i] === res.request[i]){
                       $(`.game_tile_r${currentGameRow}t${i+1}`).removeClass('present')
                       $(`.game_tile_r${currentGameRow}t${i+1}`).addClass('correct')
+                      $(`.kb_btn.${kbBtn}`).css('background-color', '#548d4e');
                     }
+                  }
+                  for (var i = 0; i < incorrectGuesses.length; i++){
+                    console.log(incorrectGuesses[i])
+                    $(`.kb_btn.${incorrectGuesses[i]}`).css('background-color', '#3a3a3c')
                   }
                 })
               })
+
+              // iterate over guess array
+                // if letter is ever present in word of day array
+                  // delete the index of that letter
+              // iterate over resulting array
+                // set css to the kb btn with the value of index
+
             console.log(res)
             currentGameRow++
             currentGameTile = 1;
