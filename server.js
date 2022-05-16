@@ -28,7 +28,7 @@ async function main() {
 
   console.log('Server connected to database...')
 
-  let wordADay = new cron.CronJob('00 00 00 * * *', () => {
+  let wordADay = new cron.CronJob('00 45 09 * * *', () => {
 
     const options = {
       method: 'GET',
@@ -49,7 +49,7 @@ async function main() {
   });
 
   app.get('/test', function (req, res) {
-    res.send(vocables[vocables.length-1])
+    res.send(todaysVocable)
   })
 
   wordADay.start();
