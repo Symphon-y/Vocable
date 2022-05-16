@@ -126,7 +126,7 @@ $(document).ready(function(){
       : letter === 'ENTER'
       ? 'kb_entr'
       : `kb_btn ${letter.toLowerCase()}`;
-    return $(`<button class="${className}">${letter}</button>`);
+    return $(`<button class="${className} passive">${letter}</button>`);
   }
 
   var keyboardChars = [
@@ -241,17 +241,21 @@ $(document).ready(function(){
             } else {
               var wordOfTheDayArray = Array.from(wordOfTheDay);
               var resReqArray = Array.from(res.request)
-              var incorrectGuesses = Array.from(res.request);
+              for (var i = 0; i < resReqArray.length; i++) {
+                var keebbtn = resReqArray[i].toLowerCase();
+                $(`.kb_btn.${keebbtn}`).removeClass('passive');
+                $(`.kb_btn.${keebbtn}`).addClass('incorrect');
+              }
               forEach(wordOfTheDayArray, function (value, index){
                 var uniqueCheck = [];
                 forEach(resReqArray, function (innerValue, innerIndex) {
                   var kbBtnValue = innerValue.toLowerCase();
-                  if (value === innerValue) {
-                    incorrectGuesses.splice(innerIndex, 1);
+                 if (value === innerValue) {
                     if (uniqueCheck.length === 0) {
                       $(`.game_tile_r${currentGameRow}t${innerIndex + 1}`).addClass('present')
                       $(`.game_tile_r${currentGameRow}t${innerIndex + 1}`).addClass('animate__flipInY')
-                      $(`.kb_btn.${kbBtnValue}`).css('background-color', '#b49f3b');
+                      $(`.kb_btn.${kbBtnValue}`).removeClass('incorrect');
+                      $(`.kb_btn.${kbBtnValue}`).addClass('present');
                       $(`.kb_btn.${kbBtnValue}`).addClass('animate__animated animate__flipInY');
                       uniqueCheck.push(value);
                     } else {
@@ -261,26 +265,18 @@ $(document).ready(function(){
                     }
                   }
                   for (var i = 0; i < wordOfTheDay.length; i++){
-                    var kbBtn = wordOfTheDay[i].toLowerCase();
+
                     if (wordOfTheDay[i] === res.request[i]){
+                      var kbBtn = res.request[i].toLowerCase();
                       $(`.game_tile_r${currentGameRow}t${i+1}`).removeClass('present')
                       $(`.game_tile_r${currentGameRow}t${i+1}`).addClass('correct')
-                      $(`.kb_btn.${kbBtn}`).css('background-color', '#548d4e');
+                      $(`.kb_btn.${kbBtn}`).removeClass('incorrect');
+                      $(`.kb_btn.${kbBtn}`).removeClass('present');
+                      $(`.kb_btn.${kbBtn}`).addClass('correct');
                     }
-                  }
-                  for (var i = 0; i < incorrectGuesses.length; i++){
-                    console.log(incorrectGuesses[i])
-                    $(`.kb_btn.${incorrectGuesses[i]}`).css('background-color', '#3a3a3c')
                   }
                 })
               })
-
-              // iterate over guess array
-                // if letter is ever present in word of day array
-                  // delete the index of that letter
-              // iterate over resulting array
-                // set css to the kb btn with the value of index
-
             console.log(res)
             currentGameRow++
             currentGameTile = 1;
@@ -344,16 +340,38 @@ $(document).ready(function(){
           } else {
             var wordOfTheDayArray = Array.from(wordOfTheDay);
             var resReqArray = Array.from(res.request)
+            for (var i = 0; i < resReqArray.length; i++) {
+              var keebbtn = resReqArray[i].toLowerCase();
+              $(`.kb_btn.${keebbtn}`).removeClass('passive');
+              $(`.kb_btn.${keebbtn}`).addClass('incorrect');
+            }
             forEach(wordOfTheDayArray, function (value, index){
+              var uniqueCheck = [];
               forEach(resReqArray, function (innerValue, innerIndex) {
-                if (value === innerValue) {
-                  $(`.game_tile_r${currentGameRow}t${innerIndex + 1}`).addClass('present')
-                  $(`.game_tile_r${currentGameRow}t${innerIndex + 1}`).addClass('animate__flipInY')
+                var kbBtnValue = innerValue.toLowerCase();
+               if (value === innerValue) {
+                  if (uniqueCheck.length === 0) {
+                    $(`.game_tile_r${currentGameRow}t${innerIndex + 1}`).addClass('present')
+                    $(`.game_tile_r${currentGameRow}t${innerIndex + 1}`).addClass('animate__flipInY')
+                    $(`.kb_btn.${kbBtnValue}`).removeClass('incorrect');
+                    $(`.kb_btn.${kbBtnValue}`).addClass('present');
+                    $(`.kb_btn.${kbBtnValue}`).addClass('animate__animated animate__flipInY');
+                    uniqueCheck.push(value);
+                  } else {
+                    if (value === uniqueCheck[0]){
+                      return;
+                    }
+                  }
                 }
                 for (var i = 0; i < wordOfTheDay.length; i++){
+
                   if (wordOfTheDay[i] === res.request[i]){
+                    var kbBtn = res.request[i].toLowerCase();
                     $(`.game_tile_r${currentGameRow}t${i+1}`).removeClass('present')
                     $(`.game_tile_r${currentGameRow}t${i+1}`).addClass('correct')
+                    $(`.kb_btn.${kbBtn}`).removeClass('incorrect');
+                    $(`.kb_btn.${kbBtn}`).removeClass('present');
+                    $(`.kb_btn.${kbBtn}`).addClass('correct');
                   }
                 }
               })
