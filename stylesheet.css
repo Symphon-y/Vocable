@@ -121,20 +121,26 @@ body {
 
 .kb_btn {
   border-radius: .5rem;
-  margin-left: .2rem;
-  margin-bottom: .2rem;
+  margin-left: .3rem;
+  margin-bottom: .3rem;
   font-family: 'Helvetica Neue', 'IBM Plex Sans', sans-serif;
   font-size: 25px;
   font-weight: 600;
   border: none;
-  height: 6rem;
-  width: 5rem;
-  background-color: #818384;
+  height: 3.5rem;
+  width: 3rem;
   color: #dadbdd;
+}
+.passive {
+  background-color: #818384;
+}
+.incorrect {
+  background-color: #3a3a3c;
 }
 .kb_btn:active {
   background-color: #727475;
 }
+
 
 .kb_entr {
   border-radius: .5rem;
@@ -144,8 +150,8 @@ body {
   font-size: 25px;
   font-weight: 600;
   border: none;
-  height: 6rem;
-  width: 8rem;
+  height: 3.5rem;
+  width: 7rem;
   background-color: #818384;
   color: #dadbdd;
 }
@@ -161,8 +167,8 @@ body {
   font-size: 25px;
   font-weight: 600;
   border: none;
-  height: 6rem;
-  width: 8rem;
+  height: 3.5rem;
+  width: 7rem;
   background-color: #818384;
   color: #dadbdd;
 }
