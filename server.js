@@ -17,8 +17,6 @@ app.use(function(req, res, next) {
   next();
 });
 
-
-
 async function main() {
   await mongoose.connect(mongoURL);
   const vocableSchema = new mongoose.Schema ({ word: String });
@@ -28,19 +26,19 @@ async function main() {
 
   console.log('Server connected to database...')
 
-  let wordADay = new cron.CronJob('00 45 09 * * *', () => {
+  let wordADay = new cron.CronJob('00 05 05 * * *', () => {
 
-    const options = {
+    const randomWordOptions = {
       method: 'GET',
-      url: 'https://random-words5.p.rapidapi.com/getRandom',
+      url: 'https://wordle-creator-tools.p.rapidapi.com/new-word',
       headers: {
         'X-RapidAPI-Host': `${process.env.Random_Word_API_Host}`,
         'X-RapidAPI-Key': `${process.env.Random_Word_API_Key}`
       }
     };
 
-    axios.request(options).then(function (response) {
-      todaysVocable = new Vocable({word: response.data})
+    axios.request(randomWordOptions).then(function (response) {
+      todaysVocable = new Vocable({word: response.data.word})
       todaysVocable.save();
       console.log(todaysVocable);
     }).catch(function (error) {
@@ -56,14 +54,15 @@ async function main() {
 }
 
 app.post('/submittedword', function (req,res) {
+
   const dictionary_options = {
     method: 'GET',
-    url: 'https://twinword-word-graph-dictionary.p.rapidapi.com/definition/',
-    params: {entry: `${req.body}`},
+    url: 'https://wordle-creator-tools.p.rapidapi.com/check-word',
+    params: {word: `${req.body}`},
     headers: {
       'X-RapidAPI-Host': `${process.env.Dictionary_API_Host}`,
       'X-RapidAPI-Key': `${process.env.Dictionary_API_Key}`
-    }
+  }
   };
   var resultToSend;
 
