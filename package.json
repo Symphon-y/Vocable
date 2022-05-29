@@ -1,0 +1,28 @@
+{
+  "name": "vocable",
+  "version": "1.0.0",
+  "description": "A word a day guessing game chosen at random",
+  "main": "index.js",
+  "scripts": {
+    "server": "node server.js",
+    "app": "node index.js"
+  },
+  "keywords": [
+    "word",
+    "random",
+    "guessing",
+    "game"
+  ],
+  "author": "Travis R. Redden",
+  "dependencies": {
+    "node.js": "^0.0.1-security",
+    "axios": "^0.27.2",
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "cron": "^2.0.0",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.1",
+    "jquery": "^3.6.0",
+    "mongoose": "^6.3.2"
+  }
+}
