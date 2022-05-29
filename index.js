@@ -1,22 +1,39 @@
 $(document).ready(function(){
-  // Get Word of The Day
-  var wordOfTheDay;
-  var wordId;
-  var storedWord = window.localStorage.getItem('Word ID');
-  var gameState = window.localStorage.getItem('Game State')
-  const endingPopup = function() {
-    getStats();
-    $popup.appendTo($body);
-    $popupContent.appendTo($popup);
-    $(".popup-overlay, .popup-content").addClass("animate__animated animate__fadeIn active");
 
-  };
+  // Grab Already Existing HTML Elements
+  var $body = $('body');
+  var $app = $('#app');
+  $app.html('');
+
+  // SHOW A LOADING SPINNER HERE
+  var $loadingContainer = $('<div class="loading-container"></div>')
+  var $loading = $('<div class="loading"></div>')
+  var $loadingText = $('<div id="loading-text">loading</div>')
+
+  $loadingContainer.appendTo($body)
+  $loading.appendTo($loadingContainer)
+  $loadingText.appendTo($loadingContainer)
 
   $.get("http://localhost:3000/test", function(data, status){
+    $loadingContainer.addClass('animate__animated animate__fadeOut')
+    $loadingContainer.remove();
+
+    var wordOfTheDay;
+    var wordId;
+    var storedWord = window.localStorage.getItem('Word ID');
+    var gameState = window.localStorage.getItem('Game State')
+    const endingPopup = function() {
+      getStats();
+      $popup.appendTo($body);
+      $popupContent.appendTo($popup);
+      $(".popup-overlay, .popup-content").addClass("animate__animated animate__fadeIn active");
+    };
+
     //console.log(data)
     wordOfTheDay = data.word;
     wordId = data._id
     if (wordId !== storedWord){
+      console.log('this is in the get request to the server')
       for (var i = 0; i <= 6; i++){
         localStorage.removeItem(`Guess ${i}`);
         localStorage.removeItem(`Evaluation Guess ${i}`);
@@ -30,15 +47,6 @@ $(document).ready(function(){
       }
     }
     window.localStorage.setItem('Word ID', wordId);
-
-    gameboard(wordOfTheDay);
-    //console.log('The Word of the Day is... ' + wordOfTheDay)
-    //console.log('Word ID: ' + wordId)
-  });
-
-
-
-
 
   // Helper Functions
   forEach = function(collection, iterator) {
@@ -132,11 +140,6 @@ $(document).ready(function(){
 
 
 
-
-  // Grab Already Existing HTML Elements
-  var $body = $('body');
-  var $app = $('#app');
-  $app.html('');
 
   // Create New HTML Elements
   var $header = $('<div id="header"></div>')
@@ -446,6 +449,8 @@ $(document).ready(function(){
   getPreviousGuesses();
 
 
+  gameboard(wordOfTheDay);
+
   const checkGuess = function () {
     if ((currentGameTile-1) < wordOfTheDay.length){
       var remainingLetters = (wordOfTheDay.length - (currentGameTile-1))
@@ -723,4 +728,6 @@ $(document).ready(function(){
     initiateBoard();
   }
 
+console.log(currentGameRow)
+  });
 });
