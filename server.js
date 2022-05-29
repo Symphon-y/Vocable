@@ -26,7 +26,7 @@ async function main() {
 
   console.log('Server connected to database...')
 
-  let wordADay = new cron.CronJob('00 05 05 * * *', () => {
+  let wordADay = new cron.CronJob('00 00 00 * * *', () => {
 
     const randomWordOptions = {
       method: 'GET',
